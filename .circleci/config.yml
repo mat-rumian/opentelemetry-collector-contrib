@@ -134,8 +134,8 @@ commands:
       - run:
           name: Push image
           command: |
-            docker push ${TAG_URL}
-            docker push ${LATEST_URL}
+            echo ${TAG_URL}
+            echo ${LATEST_URL}
 
 
 workflows:
@@ -160,17 +160,7 @@ workflows:
   build-publish:
     when: << pipeline.parameters.run-build-publish >>
     jobs:
-      - windows-test:
-          filters:
-            tags:
-              only: /.*/
       - setup:
-          filters:
-            tags:
-              only: /.*/
-      - lint:
-          requires:
-            - setup
           filters:
             tags:
               only: /.*/
@@ -186,18 +176,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - loadtest:
-          requires:
-            - cross-compile
-          filters:
-            tags:
-              only: /.*/
-      - unit-tests:
-          requires:
-            - setup
-          filters:
-            tags:
-              only: /.*/
       - windows-msi:
           requires:
             - cross-compile
@@ -206,23 +184,13 @@ workflows:
               only: /.*/
       - publish-check:
           requires:
-            - lint
-            - unit-tests
-            - integration-tests
             - cross-compile
-            - loadtest
-            - windows-test
             - windows-msi
             - deb-package
             - rpm-package
       - publish-stable:
           requires:
-            - lint
-            - unit-tests
-            - integration-tests
             - cross-compile
-            - loadtest
-            - windows-test
             - windows-msi
             - deb-package
             - rpm-package
@@ -233,11 +201,6 @@ workflows:
               only: /.*/
       - spawn-stability-tests-job:
           requires:
-            - lint
-            - unit-tests
-            - loadtest
-            - windows-test
-            - integration-tests
             - cross-compile
           filters:
             branches:
