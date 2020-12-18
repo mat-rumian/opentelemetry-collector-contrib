@@ -119,11 +119,11 @@ commands:
             echo "export REGISTRY=public.ecr.aws/sumologic" >> $BASH_ENV
             echo "export TAG_URL=public.ecr.aws/sumologic/<< parameters.repo >>:<< parameters.tag >>" >> $BASH_ENV
             echo "export LATEST_URL=public.ecr.aws/sumologic/<< parameters.repo >>:latest" >> $BASH_ENV
-      - run:
-          name: Build image
-          command: |
-            make docker-otelcontribcol
-            docker tag otelcontribcol:latest ${TAG_URL}
+#      - run:
+#          name: Build image
+#          command: |
+#            make docker-otelcontribcol
+#            docker tag otelcontribcol:latest ${TAG_URL}
       - aws-cli/install
       - run:
           name: Login to AWS ECR
