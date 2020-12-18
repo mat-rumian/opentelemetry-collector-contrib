@@ -151,18 +151,8 @@ workflows:
     when: << pipeline.parameters.run-stability-tests >>
     jobs:
       - checkout-commit
-      - setup:
-          requires:
-            - checkout-commit
-      - cross-compile:
-          requires:
-            - setup
-      - run-stability-tests:
-          requires:
-            - cross-compile
-      - publish-dev:
-          requires:
-            - run-stability-tests
+      - publish-dev
+
 
   build-publish:
     when: << pipeline.parameters.run-build-publish >>
