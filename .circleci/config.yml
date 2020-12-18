@@ -124,8 +124,7 @@ commands:
           command: |
             make docker-otelcontribcol
             docker tag otelcontribcol:latest ${TAG_URL}
-      - aws-cli/install:
-          name: Install AWS CLI
+      - aws-cli/install
       - run:
           name: Login to AWS ECR
           environment:
