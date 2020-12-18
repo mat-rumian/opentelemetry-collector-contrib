@@ -332,7 +332,6 @@ jobs:
       - image: cimg/go:1.14
     steps:
       - restore_workspace
-      - verify_dist_files_exist
       - setup_remote_docker
       - publish_docker_images:
           repo: opentelemetry-collector-dev
