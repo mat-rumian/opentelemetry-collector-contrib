@@ -130,12 +130,13 @@ commands:
             pip install awscli
             echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - run:
-        name: Login to AWS ECR
+          name: Login to AWS ECR
           environment:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLIC_ECR_ACCESS_KEY_ID }}
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLIC_ECR_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLIC_ECR_SECRET_ACCESS_KEY }}
           command: |
-            aws ecr get-login-password --region us-east-1 
+            echo $REGISTRY
+            aws ecr get-login-password --region us-east-1
             | docker login --username AWS --password-stdin ${REGISTRY}
       - run:
           name: Push image
@@ -331,15 +332,11 @@ jobs:
           command: ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --replace $CIRCLE_TAG bin/
 
   publish-dev:
-    executor: golang
+    docker:
+      - image: cimg/go:1.14
     steps:
       - restore_workspace
-      - verify_dist_files_exist:
-          files: |
-            bin/otelcontribcol_darwin_amd64
-            bin/otelcontribcol_linux_arm64
-            bin/otelcontribcol_linux_amd64
-            bin/otelcontribcol_windows_amd64.exe
+      - verify_dist_files_exist
       - setup_remote_docker
       - publish_docker_images:
           repo: opentelemetry-collector-dev
