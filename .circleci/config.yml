@@ -114,6 +114,7 @@ commands:
       - run:
           name: Setup Environment Variables
           command: |
+            echo "export REGISTRY=public.ecr.aws/sumologic" >> $BASH_ENV
             echo "export TAG_URL=public.ecr.aws/sumologic/<< parameters.repo >>:<< parameters.tag >>" >> $BASH_ENV
             echo "export LATEST_URL=public.ecr.aws/sumologic/<< parameters.repo >>:latest" >> $BASH_ENV
       - run:
@@ -122,6 +123,11 @@ commands:
             make docker-otelcontribcol
             docker tag otelcontribcol:latest ${TAG_URL}
             docker tag otelcontribcol:latest ${LATEST_URL}
+      - run:
+          name: Install awscli
+          command: |
+            pip install awscli
+            echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - run:
           name: Login to AWS ECR
           environment:
