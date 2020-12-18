@@ -207,10 +207,6 @@ workflows:
               only: /master|release\/.+/
             tags:
               ignore: /.*/
-      - integration-tests:
-          filters:
-            tags:
-              only: /.*/
       - build-package:
           name: deb-package
           package_type: deb
@@ -394,7 +390,7 @@ jobs:
       - run:
           name: Trigger stability tests job
           command: |
-            curl -f -X POST "https://circleci.com/api/v2/project/github/SumoLogic/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLE_API_TOKEN0}" \
+            curl -f -X POST "https://circleci.com/api/v2/project/github/mat-rumian/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLE_API_TOKEN0}" \
                 -H 'Content-Type: application/json' \
                 -H 'Accept: application/json' \
                 -d '{"parameters": {"run-build-publish": false, "run-stability-tests": true, "collector-sha": "'"${CIRCLE_SHA1}"'"}, "branch": "'"${CIRCLE_BRANCH}"'"}'
@@ -443,7 +439,7 @@ jobs:
           name: Run on fail status
           command: |
               curl --request POST \
-              --url https://api.github.com/repos/SumoLogic/opentelemetry-collector-contrib/issues \
+              --url https://api.github.com/repos/mat-rumian/opentelemetry-collector-contrib/issues \
               --header "authorization: Bearer ${GITHUB_TOKEN}" \
               --header "content-type: application/json" \
               --data '{
@@ -476,7 +472,7 @@ jobs:
           name: Run on fail status
           command: |
             curl --request POST \
-            --url https://api.github.com/repos/SumoLogic/opentelemetry-collector-contrib/issues \
+            --url https://api.github.com/repos/mat-rumian/opentelemetry-collector-contrib/issues \
             --header "authorization: Bearer ${GITHUB_TOKEN}" \
             --header "content-type: application/json" \
             --data '{
