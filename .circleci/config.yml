@@ -127,12 +127,12 @@ commands:
       - aws-cli/install
       - run:
           name: Login to AWS ECR
-          environment:
-            AWS_ACCESS_KEY_ID: $AWS_PUBLIC_ECR_ACCESS_KEY_ID
-            AWS_SECRET_ACCESS_KEY: $AWS_PUBLIC_ECR_SECRET_ACCESS_KEY
+#          environment:
+#            AWS_ACCESS_KEY_ID: $AWS_PUBLIC_ECR_ACCESS_KEY_ID
+#            AWS_SECRET_ACCESS_KEY: $AWS_PUBLIC_ECR_SECRET_ACCESS_KEY
           command: |
             echo $REGISTRY
-            aws ecr get-login-password --region us-east-1
+            aws ecr-public get-login-password --region us-east-1
             | docker login --username AWS --password-stdin ${REGISTRY}
       - run:
           name: Push image
