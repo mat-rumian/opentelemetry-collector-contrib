@@ -112,11 +112,13 @@ commands:
         type: string
     steps:
       - run:
+          name: Setup Environment Variables
+          command: |
+            echo "export REGISTRY=public.ecr.aws/sumologic" >> $BASH_ENV
+            echo "export TAG_URL=${REGISTRY}/<< parameters.repo >>:<< parameters.tag >>" >> $BASH_ENV
+            echo "export LATEST_URL${REGISTRY}/<< parameters.repo >>:latest" >> $BASH_ENV
+      - run:
           name: Build image
-          environment:
-            REGISTRY: public.ecr.aws/sumologic
-            TAG_URL: ${REGISTRY}/<< parameters.repo >>:<< parameters.tag >>
-            LATEST_URL: ${REGISTRY}/<< parameters.repo >>:latest
           command: |
             make docker-otelcontribcol
             docker tag otelcontribcol:latest ${TAG_URL}
@@ -126,19 +128,15 @@ commands:
           environment:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLIC_ECR_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLIC_ECR_SECRET_ACCESS_KEY }}
-            REGISTRY: public.ecr.aws/sumologic
           command: |
             aws ecr get-login-password --region us-east-1 
             | docker login --username AWS --password-stdin ${REGISTRY}
       - run:
           name: Push image
-          environment:
-            REGISTRY: public.ecr.aws/sumologic
-            TAG_URL: ${REGISTRY}/<< parameters.repo >>:<< parameters.tag >>
-            LATEST_URL: ${REGISTRY}/<< parameters.repo >>:latest
           command: |
             docker push ${TAG_URL}
             docker push ${LATEST_URL}
+
 
 workflows:
   version: 2
@@ -433,7 +431,7 @@ jobs:
       - run:
           name: Trigger stability tests job
           command: |
-            curl -f -X POST "https://circleci.com/api/v2/project/github/SumoLogic/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLE_API_TOKEN}" \
+            curl -f -X POST "https://circleci.com/api/v2/project/github/SumoLogic/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLE_API_TOKEN0}" \
                 -H 'Content-Type: application/json' \
                 -H 'Accept: application/json' \
                 -d '{"parameters": {"run-build-publish": false, "run-stability-tests": true, "collector-sha": "'"${CIRCLE_SHA1}"'"}, "branch": "'"${CIRCLE_BRANCH}"'"}'
