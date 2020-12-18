@@ -150,12 +150,9 @@ workflows:
       - setup:
           requires:
             - checkout-commit
-      - cross-compile:
-          requires:
-            - setup
       - publish-dev:
           requires:
-            - cross-compile
+            - setup
 
   build-publish:
     when: << pipeline.parameters.run-build-publish >>
@@ -164,15 +161,9 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - cross-compile:
-          requires:
-            - setup
-          filters:
-            tags:
-              only: /.*/
       - spawn-stability-tests-job:
           requires:
-            - cross-compile
+            - setup
           filters:
             branches:
               only: /master|release\/.+/
