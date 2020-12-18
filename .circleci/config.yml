@@ -114,9 +114,8 @@ commands:
       - run:
           name: Setup Environment Variables
           command: |
-            echo "export REGISTRY=public.ecr.aws/sumologic" >> $BASH_ENV
-            echo "export TAG_URL=${REGISTRY}/<< parameters.repo >>:<< parameters.tag >>" >> $BASH_ENV
-            echo "export LATEST_URL${REGISTRY}/<< parameters.repo >>:latest" >> $BASH_ENV
+            echo "export TAG_URL=public.ecr.aws/sumologic/<< parameters.repo >>:<< parameters.tag >>" >> $BASH_ENV
+            echo "export LATEST_URL=public.ecr.aws/sumologic/<< parameters.repo >>:latest" >> $BASH_ENV
       - run:
           name: Build image
           command: |
