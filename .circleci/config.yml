@@ -311,8 +311,8 @@ jobs:
       - restore_workspace
       - setup_remote_docker
       - publish_docker_images:
-          repo: opentelemetry-collector-dev
-          tag: ${CIRCLE_SHA1}
+          repo: opentelemetry-collector
+          tag: dev-${CIRCLE_SHA1}
 
   spawn-stability-tests-job:
     executor: golang
