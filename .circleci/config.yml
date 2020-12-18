@@ -13,6 +13,7 @@ parameters:
 
 orbs:
   win: circleci/windows@2.4.0
+  aws-ecr: circleci/aws-ecr@6.15.2
 
 executors:
   golang:
@@ -129,9 +130,9 @@ commands:
             pip install awscli
             echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - run:
-          name: Login to AWS ECR
+        name: Login to AWS ECR
           environment:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLIC_ECR_ACCESS_KEY_ID }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLIC_ECR_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLIC_ECR_SECRET_ACCESS_KEY }}
           command: |
             aws ecr get-login-password --region us-east-1 
@@ -169,39 +170,10 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - build-examples:
-          requires:
-            - setup
-          filters:
-            tags:
-              only: /.*/
       - cross-compile:
           requires:
             - setup
           filters:
-            tags:
-              only: /.*/
-      - windows-msi:
-          requires:
-            - cross-compile
-          filters:
-            tags:
-              only: /.*/
-      - publish-check:
-          requires:
-            - cross-compile
-            - windows-msi
-            - deb-package
-            - rpm-package
-      - publish-stable:
-          requires:
-            - cross-compile
-            - windows-msi
-            - deb-package
-            - rpm-package
-          filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /.*/
       - spawn-stability-tests-job:
@@ -212,22 +184,6 @@ workflows:
               only: /master|release\/.+/
             tags:
               ignore: /.*/
-      - build-package:
-          name: deb-package
-          package_type: deb
-          requires:
-            - cross-compile
-          filters:
-            tags:
-              only: /.*/
-      - build-package:
-          name: rpm-package
-          package_type: rpm
-          requires:
-            - cross-compile
-          filters:
-            tags:
-              only: /.*/
 
 
 jobs:
