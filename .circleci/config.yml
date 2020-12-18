@@ -14,6 +14,7 @@ parameters:
 orbs:
   win: circleci/windows@2.4.0
   aws-ecr: circleci/aws-ecr@6.15.2
+  aws-cli: circleci/aws-cli@1.3.1
 
 executors:
   golang:
@@ -123,12 +124,8 @@ commands:
           command: |
             make docker-otelcontribcol
             docker tag otelcontribcol:latest ${TAG_URL}
-            docker tag otelcontribcol:latest ${LATEST_URL}
-      - run:
-          name: Install awscli
-          command: |
-            pip install awscli
-            echo "/home/runner/.local/bin" >> $GITHUB_PATH
+      - aws-cli/install:
+          name: Install AWS CLI
       - run:
           name: Login to AWS ECR
           environment:
