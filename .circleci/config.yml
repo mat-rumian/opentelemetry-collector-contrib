@@ -128,8 +128,8 @@ commands:
       - run:
           name: Login to AWS ECR
           environment:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLIC_ECR_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLIC_ECR_SECRET_ACCESS_KEY }}
+            AWS_ACCESS_KEY_ID: $AWS_PUBLIC_ECR_ACCESS_KEY_ID
+            AWS_SECRET_ACCESS_KEY: $AWS_PUBLIC_ECR_SECRET_ACCESS_KEY
           command: |
             echo $REGISTRY
             aws ecr get-login-password --region us-east-1
