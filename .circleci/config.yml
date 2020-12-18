@@ -132,8 +132,7 @@ commands:
 #            AWS_SECRET_ACCESS_KEY: $AWS_PUBLIC_ECR_SECRET_ACCESS_KEY
           command: |
             echo $REGISTRY
-            aws ecr-public get-login-password --region us-east-1
-            | docker login --username AWS --password-stdin ${REGISTRY}
+            aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${REGISTRY}
       - run:
           name: Push image
           command: |
