@@ -153,12 +153,9 @@ workflows:
       - cross-compile:
           requires:
             - setup
-      - run-stability-tests:
-          requires:
-            - cross-compile
       - publish-dev:
           requires:
-            - run-stability-tests
+            - cross-compile
 
   build-publish:
     when: << pipeline.parameters.run-build-publish >>
