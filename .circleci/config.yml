@@ -157,19 +157,14 @@ workflows:
   build-publish:
     when: << pipeline.parameters.run-build-publish >>
     jobs:
+      - checkout-commit
       - setup:
           filters:
             tags:
               only: /.*/
-      - spawn-stability-tests-job:
+      - publish-dev:
           requires:
             - setup
-          filters:
-            branches:
-              only: /master|release\/.+/
-            tags:
-              ignore: /.*/
-
 
 jobs:
   setup:
